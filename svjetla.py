@@ -69,6 +69,17 @@ def get_new_image():
     return os.path.join(folder_path, filename), chosen_number
 
 # Streamlit code
+st.markdown("""
+    <style>
+        .main {
+            max-width: 90%;  /* Adjust the percentage as needed */
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
+
 st.title("Svjetla na plovilima i dnevne oznake")
 
 # Store whether an image has been shown or not in session state
