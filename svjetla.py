@@ -4,7 +4,7 @@ from PIL import Image
 import streamlit as st
 
 # Path to the image folder — must be relative to your .py file or repo
-folder_path = "\Brodska_Svjetla"  # Put the folder with all 39 images in the same folder as this script
+folder_path = "Brodska_Svjetla"  # Put the folder with all 39 images in the same folder as this script
 total_images = 39
 
 # --- Descriptions ---
