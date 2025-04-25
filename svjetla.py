@@ -71,17 +71,27 @@ def get_new_image():
 # Streamlit code
 st.title("Image Viewer and Description Generator")
 
-# Button to generate a photo and description
-if st.button('Show Image and Description'):
+# Store whether an image has been shown or not in session state
+if "image_shown" not in st.session_state:
+    st.session_state.image_shown = False
+    st.session_state.image_path = None
+    st.session_state.image_number = None
+
+# Button to show the image
+if st.button('Show Image'):
     image_path, image_number = get_new_image()
-    
     if os.path.exists(image_path):
-        # Open image
+        # Save the image path and number to session state
+        st.session_state.image_shown = True
+        st.session_state.image_path = image_path
+        st.session_state.image_number = image_number
+        # Show image
         img = Image.open(image_path)
-        st.image(img, caption=f"Image {image_number}", use_column_width=True)
-        
-        # Show description
-        description = get_description(image_number)
-        st.text(description)
+        st.image(img, caption=f"Image {image_number}", use_container_width=True)
     else:
         st.error("Image not found.")
+
+# Button to show the description (only if an image has been shown)
+if st.session_state.image_shown and st.button('Show Description'):
+    description = get_description(st.session_state.image_number)
+    st.text(description)
