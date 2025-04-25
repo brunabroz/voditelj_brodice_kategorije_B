@@ -4,7 +4,7 @@ from PIL import Image, ImageTk
 import tkinter as tk
 
 # Folder and total images setup
-folder_path = r'/Users/brunabrozovic/Desktop/Brodska_Svjetla'  
+folder_path = r'./Brodska_Svjetla'  
 total_images = 39
 shown_images = []
 
