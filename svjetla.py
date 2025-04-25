@@ -78,8 +78,8 @@ if "image_shown" not in st.session_state:
     st.session_state.image_number = None
     st.session_state.show_description = False  # Store description visibility status
 
-# Add the buttons without columns
-if st.button('Pokazi sliku'):
+# Only show the image once when "Pokazi sliku" is clicked
+if st.button('Pokazi sliku') and not st.session_state.image_shown:
     # Remove any description if shown
     st.session_state.show_description = False
 
@@ -96,6 +96,7 @@ if st.button('Pokazi sliku'):
     else:
         st.error("Image not found.")
 
+# Only show the description once the "Pokazi opis" button is clicked
 if st.button('Pokazi opis') and st.session_state.image_shown:
     st.session_state.show_description = True
 
