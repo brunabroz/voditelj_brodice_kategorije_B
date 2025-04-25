@@ -78,37 +78,32 @@ if "image_shown" not in st.session_state:
     st.session_state.image_number = None
     st.session_state.show_description = False  # Store description visibility status
 
-# Add two buttons next to each other (show image and show description)
-col1, col2 = st.columns([1, 1])  # Create two columns
+# Add the buttons without columns
+if st.button('Pokazi sliku'):
+    # Remove any description if shown
+    st.session_state.show_description = False
 
-# Show image when "Pokazi sliku" is clicked
-with col1:
-    if st.button('Pokazi sliku'):
-        # Remove any description if shown
-        st.session_state.show_description = False
+    # Show a new image
+    image_path, image_number = get_new_image()
+    if os.path.exists(image_path):
+        # Save the image path and number to session state
+        st.session_state.image_shown = True
+        st.session_state.image_path = image_path
+        st.session_state.image_number = image_number
+        # Show the image with fixed width for consistency
+        img = Image.open(image_path)
+        st.image(img, width=800)  # Fixed width for consistency
+    else:
+        st.error("Image not found.")
 
-        # Show a new image
-        image_path, image_number = get_new_image()
-        if os.path.exists(image_path):
-            # Save the image path and number to session state
-            st.session_state.image_shown = True
-            st.session_state.image_path = image_path
-            st.session_state.image_number = image_number
-            # Do not use columns for image display, to avoid any internal layout scaling
-            img = Image.open(image_path)
-            st.image(img, width=800)  # Explicit width to ensure consistent size
-        else:
-            st.error("Image not found.")
-
-# Show description when "Pokazi opis" is clicked
-with col2:
-    if st.button('Pokazi opis') and st.session_state.image_shown:
-        st.session_state.show_description = True
+if st.button('Pokazi opis') and st.session_state.image_shown:
+    st.session_state.show_description = True
 
 # Show description under the image if it's shown, but keep the image
-if st.session_state.image_shown and st.session_state.show_description:
-    # Display the same image again and then show the description
+if st.session_state.image_shown:
+    # Display the same image again if description is shown
     img = Image.open(st.session_state.image_path)
-    st.image(img, width=800)  # Explicit width to ensure consistent size
-    description = get_description(st.session_state.image_number)
-    st.text(description)
+    st.image(img, width=800)  # Fixed width for consistency
+    if st.session_state.show_description:
+        description = get_description(st.session_state.image_number)
+        st.text(description)
