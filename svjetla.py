@@ -78,7 +78,24 @@ if "image_shown" not in st.session_state:
     st.session_state.image_number = None
     st.session_state.show_description = False  # Store description visibility status
 
-# Only show the image once when "Pokazi sliku" is clicked
+# Buttons next to each other using markdown for HTML formatting
+st.markdown("""
+    <style>
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .button-container button {
+            width: 48%;
+        }
+    </style>
+    <div class="button-container">
+        <button id="show_image">Pokazi sliku</button>
+        <button id="show_description">Pokazi opis</button>
+    </div>
+""", unsafe_allow_html=True)
+
+# Show image when "Pokazi sliku" is clicked
 if st.button('Pokazi sliku') and not st.session_state.image_shown:
     # Remove any description if shown
     st.session_state.show_description = False
@@ -96,7 +113,7 @@ if st.button('Pokazi sliku') and not st.session_state.image_shown:
     else:
         st.error("Image not found.")
 
-# Only show the description once the "Pokazi opis" button is clicked
+# Show description when "Pokazi opis" is clicked
 if st.button('Pokazi opis') and st.session_state.image_shown:
     st.session_state.show_description = True
 
