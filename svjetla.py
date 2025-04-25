@@ -99,7 +99,13 @@ with col2:
     if st.button('Pokazi opis'):
         st.session_state.show_description = True
 
-# Show description under the image if it's shown
-if st.session_state.image_shown and st.session_state.show_description:
-    description = get_description(st.session_state.image_number)
-    st.text(description)
+# Show description under the image if it's shown, but keep the image
+if st.session_state.image_shown:
+    # Always show the image if it's shown, even after clicking 'Pokazi opis'
+    img = Image.open(st.session_state.image_path)
+    st.image(img, caption=f"Image {st.session_state.image_number}", use_container_width=True)  # Keep image
+
+    # Show description if the "Pokazi opis" button has been clicked
+    if st.session_state.show_description:
+        description = get_description(st.session_state.image_number)
+        st.text(description)
