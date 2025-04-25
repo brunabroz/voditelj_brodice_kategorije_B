@@ -69,7 +69,7 @@ def get_new_image():
     return os.path.join(folder_path, filename), chosen_number
 
 # Streamlit code
-st.title("Image Viewer and Description Generator")
+st.title("Svjetla na plovilima i dnevne oznake")
 
 # Store whether an image has been shown or not in session state
 if "image_shown" not in st.session_state:
@@ -78,7 +78,7 @@ if "image_shown" not in st.session_state:
     st.session_state.image_number = None
 
 # Button to show the image
-if st.button('Show Image'):
+if st.button('Pokazi sliku'):
     image_path, image_number = get_new_image()
     if os.path.exists(image_path):
         # Save the image path and number to session state
@@ -91,7 +91,8 @@ if st.button('Show Image'):
     else:
         st.error("Image not found.")
 
-# Button to show the description (only if an image has been shown)
-if st.session_state.image_shown and st.button('Show Description'):
-    description = get_description(st.session_state.image_number)
-    st.text(description)
+# Show description if the image has been shown, and the "Show Description" button is clicked
+if st.session_state.image_shown:
+    if st.button('Pokazi opis'):
+        description = get_description(st.session_state.image_number)
+        st.text(description)
