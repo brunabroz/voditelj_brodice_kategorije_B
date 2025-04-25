@@ -89,9 +89,9 @@ with col1:
             st.session_state.image_shown = True
             st.session_state.image_path = image_path
             st.session_state.image_number = image_number
-            # Show image
+            # Show image (Increase image size)
             img = Image.open(image_path)
-            st.image(img, caption=f"Image {image_number}", use_container_width=True)
+            st.image(img, caption=f"Image {image_number}", use_container_width=True)  # Use the full width
         else:
             st.error("Image not found.")
 
