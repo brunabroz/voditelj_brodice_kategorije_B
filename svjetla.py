@@ -93,6 +93,9 @@ if st.button('Pokazi sliku'):
 
 # Show description if the image has been shown, and the "Show Description" button is clicked
 if st.session_state.image_shown:
-    if st.button('Pokazi opis'):
+    # This will keep both the image and description visible
+    show_description = st.button('Pokazi opis')
+
+    if show_description:
         description = get_description(st.session_state.image_number)
         st.text(description)
