@@ -76,26 +76,30 @@ if "image_shown" not in st.session_state:
     st.session_state.image_shown = False
     st.session_state.image_path = None
     st.session_state.image_number = None
+    st.session_state.show_description = False  # Store description visibility status
 
-# Button to show the image
-if st.button('Pokazi sliku'):
-    image_path, image_number = get_new_image()
-    if os.path.exists(image_path):
-        # Save the image path and number to session state
-        st.session_state.image_shown = True
-        st.session_state.image_path = image_path
-        st.session_state.image_number = image_number
-        # Show image
-        img = Image.open(image_path)
-        st.image(img, caption=f"Image {image_number}", use_container_width=True)
-    else:
-        st.error("Image not found.")
+# Add two buttons next to each other (show image and show description)
+col1, col2 = st.columns([1, 1])  # Create two columns
 
-# Show description if the image has been shown, and the "Show Description" button is clicked
-if st.session_state.image_shown:
-    # This will keep both the image and description visible
-    show_description = st.button('Pokazi opis')
+with col1:
+    if st.button('Pokazi sliku'):
+        image_path, image_number = get_new_image()
+        if os.path.exists(image_path):
+            # Save the image path and number to session state
+            st.session_state.image_shown = True
+            st.session_state.image_path = image_path
+            st.session_state.image_number = image_number
+            # Show image
+            img = Image.open(image_path)
+            st.image(img, caption=f"Image {image_number}", use_container_width=True)
+        else:
+            st.error("Image not found.")
 
-    if show_description:
-        description = get_description(st.session_state.image_number)
-        st.text(description)
+with col2:
+    if st.button('Pokazi opis'):
+        st.session_state.show_description = True
+
+# Show description under the image if it's shown
+if st.session_state.image_shown and st.session_state.show_description:
+    description = get_description(st.session_state.image_number)
+    st.text(description)
