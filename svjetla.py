@@ -79,6 +79,7 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+
 st.title("Svjetla na plovilima i dnevne oznake")
 
 # Store whether an image has been shown or not in session state
@@ -99,16 +100,16 @@ with col1:
 
         # Show a new image
         image_path, image_number = get_new_image()
-        st.write(f"Image Path: {image_path}")  # Debugging log to check image path
         if os.path.exists(image_path):
             # Save the image path and number to session state
             st.session_state.image_shown = True
             st.session_state.image_path = image_path
             st.session_state.image_number = image_number
+            # Do not use columns for image display, to avoid any internal layout scaling
             img = Image.open(image_path)
             st.image(img, width=800)  # Explicit width to ensure consistent size
         else:
-            st.error(f"Image not found at path: {image_path}")  # Debugging error message
+            st.error("Bravo, prosli ste sve slike!")
 
 # Show description when "Pokazi opis" is clicked
 with col2:
@@ -117,6 +118,7 @@ with col2:
 
 # Show description under the image if it's shown, but keep the image
 if st.session_state.image_shown and st.session_state.show_description:
+    # Display the same image again and then show the description
     img = Image.open(st.session_state.image_path)
     st.image(img, width=800)  # Explicit width to ensure consistent size
     description = get_description(st.session_state.image_number)
