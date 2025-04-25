@@ -98,7 +98,7 @@ with col1:
             img = Image.open(image_path)
             st.image(img, width=800)  # Explicit width to ensure consistent size
         else:
-            st.error("Image not found.")
+            st.error("Bravo, prosli ste sve slike!")
 
 # Show description when "Pokazi opis" is clicked
 with col2:
