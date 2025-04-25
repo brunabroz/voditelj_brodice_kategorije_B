@@ -69,16 +69,6 @@ def get_new_image():
     return os.path.join(folder_path, filename), chosen_number
 
 # Streamlit code
-st.markdown("""
-    <style>
-        .main {
-            max-width: 90%;  /* Adjust the percentage as needed */
-            margin-left: auto;
-            margin-right: auto;
-        }
-    </style>
-""", unsafe_allow_html=True)
-
 
 st.title("Svjetla na plovilima i dnevne oznake")
 
@@ -116,10 +106,10 @@ with col2:
     if st.button('Pokazi opis') and st.session_state.image_shown:
         st.session_state.show_description = True
 
-# Show description under the image if it's shown, but keep the image
-if st.session_state.image_shown and st.session_state.show_description:
-    # Display the same image again and then show the description
-    img = Image.open(st.session_state.image_path)
-    st.image(img, width=800)  # Explicit width to ensure consistent size
-    description = get_description(st.session_state.image_number)
-    st.text(description)
+    # Show description under the image if it's shown, but keep the image
+    if st.session_state.image_shown and st.session_state.show_description:
+        # Display the same image again and then show the description
+        img = Image.open(st.session_state.image_path)
+        st.image(img, width=800)  # Explicit width to ensure consistent size
+        description = get_description(st.session_state.image_number)
+        st.text(description)
