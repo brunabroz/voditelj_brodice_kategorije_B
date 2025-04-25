@@ -94,9 +94,9 @@ with col1:
             st.session_state.image_shown = True
             st.session_state.image_path = image_path
             st.session_state.image_number = image_number
-            # Show image (Increase image size)
+            # Show image with a fixed width for consistent size
             img = Image.open(image_path)
-            st.image(img, use_container_width=True)  # Use the full width
+            st.image(img, width=600)  # Fixed width for consistency
         else:
             st.error("Image not found.")
 
@@ -109,6 +109,6 @@ with col2:
 if st.session_state.image_shown and st.session_state.show_description:
     # Display the same image again and then show the description
     img = Image.open(st.session_state.image_path)
-    st.image(img, use_container_width=True)  # Show the image again
+    st.image(img, width=600)  # Fixed width for consistency
     description = get_description(st.session_state.image_number)
     st.text(description)
