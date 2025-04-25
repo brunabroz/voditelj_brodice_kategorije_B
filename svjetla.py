@@ -69,6 +69,16 @@ def get_new_image():
     return os.path.join(folder_path, filename), chosen_number
 
 # Streamlit code
+st.markdown("""
+    <style>
+        .main {
+            max-width: 90%;  /* Adjust the percentage as needed */
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
 
 st.title("Svjetla na plovilima i dnevne oznake")
 
@@ -78,6 +88,10 @@ if "image_shown" not in st.session_state:
     st.session_state.image_path = None
     st.session_state.image_number = None
     st.session_state.show_description = False  # Store description visibility status
+
+# Initialize an empty container to display the image
+if "image_container" not in st.session_state:
+    st.session_state.image_container = st.empty()  # Create an empty container for the image
 
 # Add two buttons next to each other (show image and show description)
 col1, col2 = st.columns([1, 1])  # Create two columns
@@ -91,13 +105,15 @@ with col1:
         # Show a new image
         image_path, image_number = get_new_image()
         if os.path.exists(image_path):
+            # Clear previous image from the container and show new image
+            st.session_state.image_container.empty()
             # Save the image path and number to session state
             st.session_state.image_shown = True
             st.session_state.image_path = image_path
             st.session_state.image_number = image_number
-            # Do not use columns for image display, to avoid any internal layout scaling
+            # Load and display the new image
             img = Image.open(image_path)
-            st.image(img, width=800)  # Explicit width to ensure consistent size
+            st.session_state.image_container.image(img, width=800)  # Display new image with fixed width
         else:
             st.error("Bravo, prosli ste sve slike!")
 
@@ -106,10 +122,10 @@ with col2:
     if st.button('Pokazi opis') and st.session_state.image_shown:
         st.session_state.show_description = True
 
-    # Show description under the image if it's shown, but keep the image
-    if st.session_state.image_shown and st.session_state.show_description:
-        # Display the same image again and then show the description
-        img = Image.open(st.session_state.image_path)
-        st.image(img, width=800)  # Explicit width to ensure consistent size
-        description = get_description(st.session_state.image_number)
-        st.text(description)
+# Show description under the image if it's shown, but keep the image
+if st.session_state.image_shown and st.session_state.show_description:
+    # Display the same image again and then show the description
+    img = Image.open(st.session_state.image_path)
+    st.session_state.image_container.image(img, width=800)  # Display the image again with fixed width
+    description = get_description(st.session_state.image_number)
+    st.text(description)
