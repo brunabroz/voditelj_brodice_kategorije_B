@@ -81,8 +81,13 @@ if "image_shown" not in st.session_state:
 # Add two buttons next to each other (show image and show description)
 col1, col2 = st.columns([1, 1])  # Create two columns
 
+# Show image when "Pokazi sliku" is clicked
 with col1:
     if st.button('Pokazi sliku'):
+        # Remove any description if shown
+        st.session_state.show_description = False
+
+        # Show a new image
         image_path, image_number = get_new_image()
         if os.path.exists(image_path):
             # Save the image path and number to session state
@@ -95,13 +100,12 @@ with col1:
         else:
             st.error("Image not found.")
 
+# Show description when "Pokazi opis" is clicked
 with col2:
-    if st.button('Pokazi opis'):
+    if st.button('Pokazi opis') and st.session_state.image_shown:
         st.session_state.show_description = True
 
 # Show description under the image if it's shown, but keep the image
-if st.session_state.image_shown:
-    # Only show the description after clicking "Pokazi opis"
-    if st.session_state.show_description:
-        description = get_description(st.session_state.image_number)
-        st.text(description)
+if st.session_state.image_shown and st.session_state.show_description:
+    description = get_description(st.session_state.image_number)
+    st.text(description)
