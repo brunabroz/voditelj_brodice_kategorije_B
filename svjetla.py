@@ -123,4 +123,3 @@ if st.session_state.image_shown and st.session_state.show_description:
     st.image(img, width=800)  # Explicit width to ensure consistent size
     description = get_description(st.session_state.image_number)
     st.text(description)
-
