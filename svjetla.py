@@ -13,19 +13,19 @@ def get_description(image_number):
     descriptions = {
         1: "Motorni brod dulji od 50m",
         2: "Motorni brod kraci od 50m",
-        3: "Motorni brod krci od 12m (15m)",
-        4: "Motorni brod krci od 7m, max brzina 7 cvorova",
+        3: "Motorni brod kraci od 12m (15m)",
+        4: "Motorni brod kraci od 7m, max brzina 7 cvorova",
         5: "Brod na vesla ili Jedrilica koja plovi (do 20m), manja od 7m moze imati samo kruzno bijelo",
         6: "Jedrilica koja plovi dulja od 20m",
         7: "Jedrilica koja istodobno koristi i motor danju",
         8: "Brod na vesla ili Jedrilica koja plovi (do 20m), manja od 7m moze imati samo kruzno bijelo",
-        9: "Motorni brod krci od 50m ,tegalj krci od 200m",
-        10: "Motorni brod krci od 50m ,tegalj dulji od 200m",
-        11: "Motorni brod dulji od 50m ,tegalj krci od 200m",
+        9: "Motorni brod kraci od 50m ,tegalj kraci od 200m",
+        10: "Motorni brod kraci od 50m ,tegalj dulji od 200m",
+        11: "Motorni brod dulji od 50m ,tegalj kraci od 200m",
         12: "Motorni brod dulji od 50m ,tegalj dulji od 200m",
-        13: "Motorni brod krci od 50m, tegli bocno",
+        13: "Motorni brod kraci od 50m, tegli bocno",
         14: "Tegljenje brod/objekt ili brod na vesla ili jedrenjak",
-        15: "Motorni brod krci/dulji od 50m, tegalj dulji od 200m",
+        15: "Motorni brod kraci/dulji od 50m, tegalj dulji od 200m",
         16: "Slabo uocljiv ili uronjen brod/objekt koji se tegli",
         17: "Brod dulji od 50m koji kocari i usidren je (nema bocnih svjetala)",
         18: "Brod dulji od 50m koji kocari i nije usidren",
@@ -38,7 +38,7 @@ def get_description(image_number):
         25: "Brod ogranicen manevrom koji se ne krece, <50m",
         26: "Brod ogranicen manevrom koji se krece, >50m",
         27: "Brod ogranicenog manevra danju",
-        28: "Motorni brod <50m koji tegli, ogranicenog manevra, tegalj krci od 200m",
+        28: "Motorni brod <50m koji tegli, ogranicenog manevra, tegalj kraci od 200m",
         29: "Brod zauzet podvodnim radovima, ogranicenog manevra koji se krece, zapreka na njegovoj desnoj strani",
         30: "Motorni brod koji razminirava, krece se i <50m.",
         31: "Razminirava i sa strane se vide kao dvije kugle, ali zapravo su odnaprijed 3 u kriz.",
@@ -78,33 +78,37 @@ if "image_shown" not in st.session_state:
     st.session_state.image_number = None
     st.session_state.show_description = False  # Store description visibility status
 
-# Show image when "Pokazi sliku" is clicked
-if st.button('Pokazi sliku') and not st.session_state.image_shown:
-    # Remove any description if shown
-    st.session_state.show_description = False
+# Add two buttons next to each other (show image and show description)
+col1, col2 = st.columns([1, 1])  # Create two columns
 
-    # Show a new image
-    image_path, image_number = get_new_image()
-    if os.path.exists(image_path):
-        # Save the image path and number to session state
-        st.session_state.image_shown = True
-        st.session_state.image_path = image_path
-        st.session_state.image_number = image_number
-        # Show the image with fixed width for consistency
-        img = Image.open(image_path)
-        st.image(img, width=800)  # Fixed width for consistency
-    else:
-        st.error("Image not found.")
+# Show image when "Pokazi sliku" is clicked
+with col1:
+    if st.button('Pokazi sliku'):
+        # Remove any description if shown
+        st.session_state.show_description = False
+
+        # Show a new image
+        image_path, image_number = get_new_image()
+        if os.path.exists(image_path):
+            # Save the image path and number to session state
+            st.session_state.image_shown = True
+            st.session_state.image_path = image_path
+            st.session_state.image_number = image_number
+            # Do not use columns for image display, to avoid any internal layout scaling
+            img = Image.open(image_path)
+            st.image(img, width=800)  # Explicit width to ensure consistent size
+        else:
+            st.error("Image not found.")
 
 # Show description when "Pokazi opis" is clicked
-if st.button('Pokazi opis') and st.session_state.image_shown:
-    st.session_state.show_description = True
+with col2:
+    if st.button('Pokazi opis') and st.session_state.image_shown:
+        st.session_state.show_description = True
 
-# Show description under the image if it's shown
-if st.session_state.image_shown:
-    # Display the same image once
+# Show description under the image if it's shown, but keep the image
+if st.session_state.image_shown and st.session_state.show_description:
+    # Display the same image again and then show the description
     img = Image.open(st.session_state.image_path)
-    st.image(img, width=800)  # Fixed width for consistency
-    if st.session_state.show_description:
-        description = get_description(st.session_state.image_number)
-        st.text(description)
+    st.image(img, width=800)  # Explicit width to ensure consistent size
+    description = get_description(st.session_state.image_number)
+    st.text(description)
