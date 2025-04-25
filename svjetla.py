@@ -79,7 +79,6 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-
 st.title("Svjetla na plovilima i dnevne oznake")
 
 # Store whether an image has been shown or not in session state
@@ -89,12 +88,12 @@ if "image_shown" not in st.session_state:
     st.session_state.image_number = None
     st.session_state.show_description = False  # Store description visibility status
 
+# Add two buttons next to each other (show image and show description)
+col1, col2 = st.columns([1, 1])  # Create two columns
+
 # Initialize an empty container to display the image
 if "image_container" not in st.session_state:
     st.session_state.image_container = st.empty()  # Create an empty container for the image
-
-# Add two buttons next to each other (show image and show description)
-col1, col2 = st.columns([1, 1])  # Create two columns
 
 # Show image when "Pokazi sliku" is clicked
 with col1:
