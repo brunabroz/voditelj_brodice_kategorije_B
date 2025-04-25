@@ -78,44 +78,32 @@ if "image_shown" not in st.session_state:
     st.session_state.image_number = None
     st.session_state.show_description = False  # Store description visibility status
 
-# Buttons next to each other using markdown for HTML formatting
-st.markdown("""
-    <style>
-        .button-container {
-            display: flex;
-            justify-content: space-between;
-        }
-        .button-container button {
-            width: 48%;
-        }
-    </style>
-    <div class="button-container">
-        <button id="show_image">Pokazi sliku</button>
-        <button id="show_description">Pokazi opis</button>
-    </div>
-""", unsafe_allow_html=True)
+# Add two buttons next to each other
+col1, col2 = st.columns([1, 1])  # Create two columns
 
 # Show image when "Pokazi sliku" is clicked
-if st.button('Pokazi sliku') and not st.session_state.image_shown:
-    # Remove any description if shown
-    st.session_state.show_description = False
+with col1:
+    if st.button('Pokazi sliku') and not st.session_state.image_shown:
+        # Remove any description if shown
+        st.session_state.show_description = False
 
-    # Show a new image
-    image_path, image_number = get_new_image()
-    if os.path.exists(image_path):
-        # Save the image path and number to session state
-        st.session_state.image_shown = True
-        st.session_state.image_path = image_path
-        st.session_state.image_number = image_number
-        # Show the image with fixed width for consistency
-        img = Image.open(image_path)
-        st.image(img, width=800)  # Fixed width for consistency
-    else:
-        st.error("Image not found.")
+        # Show a new image
+        image_path, image_number = get_new_image()
+        if os.path.exists(image_path):
+            # Save the image path and number to session state
+            st.session_state.image_shown = True
+            st.session_state.image_path = image_path
+            st.session_state.image_number = image_number
+            # Show the image with fixed width for consistency
+            img = Image.open(image_path)
+            st.image(img, width=800)  # Fixed width for consistency
+        else:
+            st.error("Image not found.")
 
 # Show description when "Pokazi opis" is clicked
-if st.button('Pokazi opis') and st.session_state.image_shown:
-    st.session_state.show_description = True
+with col2:
+    if st.button('Pokazi opis') and st.session_state.image_shown:
+        st.session_state.show_description = True
 
 # Show description under the image if it's shown, but keep the image
 if st.session_state.image_shown:
